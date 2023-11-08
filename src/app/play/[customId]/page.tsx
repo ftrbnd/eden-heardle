@@ -25,7 +25,10 @@ export async function generateMetadata({ params }: CustomPageProps): Promise<Met
   }
 
   return {
-    title: `${customHeardle?.user.name}'s Custom EDEN Heardle`
+    title: `${customHeardle?.user.name}'s Custom EDEN Heardle`,
+    openGraph: {
+      images: customHeardle.user.image ? [customHeardle.user.image] : []
+    }
   };
 }
 

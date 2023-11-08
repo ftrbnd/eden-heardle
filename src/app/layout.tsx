@@ -12,7 +12,10 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'EDEN Heardle',
-  description: 'Get 6 chances to guess the EDEN song!'
+  description: 'Get 6 chances to guess the EDEN song!',
+  openGraph: {
+    images: ['/icon.png']
+  }
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
