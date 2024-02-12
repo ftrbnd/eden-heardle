@@ -21,9 +21,17 @@ interface AnnouncementProps {
 }
 
 function AnnouncementBanner({ setShowBanner, announcement }: AnnouncementProps) {
+  const router = useRouter();
+
+  const handleBannerClick = () => {
+    router.push('/play/unlimited');
+  };
+
   return (
     <div className="flex justify-center items-center bg-success text-success-content w-full h-min p-2">
-      <div className="btn btn-ghost px-1 sm:px-2">{announcement}</div>
+      <div onClick={handleBannerClick} className="btn btn-ghost px-1 sm:px-2">
+        {announcement}
+      </div>
       <button className="btn btn-ghost px-1 sm:px-2" onClick={() => setShowBanner(false)}>
         <FontAwesomeIcon icon={faClose} className="h-4 w-4" />
       </button>
@@ -32,7 +40,7 @@ function AnnouncementBanner({ setShowBanner, announcement }: AnnouncementProps) 
 }
 
 export default function PlayContent({ children }: { children: ReactNode }) {
-  const [showBanner, setShowBanner] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
 
   const { guesses, loadingGuesses } = useGuesses();
   const { dailySong, dailySongLoading } = useDailySong();
@@ -45,7 +53,7 @@ export default function PlayContent({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex flex-col items-center h-full justify-between">
-      {showBanner && <AnnouncementBanner setShowBanner={setShowBanner} announcement="announcement" />}
+      {showBanner && <AnnouncementBanner setShowBanner={setShowBanner} announcement="NEW: Unlimited Heardles!" />}
       <Navbar>{children}</Navbar>
       <div className="grid grid-rows-2-auto place-items-center gap-1 px-4 w-full h-full pt-4">
         <AnimatePresence>
