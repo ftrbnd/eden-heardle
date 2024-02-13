@@ -131,7 +131,7 @@ export default function ResultCard({ song, guessedSong, customHeardleCreator, ot
         <Image src={song?.cover ?? ''} alt={song?.name} fill style={{ objectFit: 'cover' }} priority />
       </figure>
       <div className="card-body items-center">
-        <h2 className="font-bold text-center text-lg sm:text-xl md:text-2xl">{guessedSong ? `Great job on ${pathname === '/play' ? "today's" : 'this;'} puzzle!` : `The song was ${song?.name}`}</h2>
+        <h2 className="font-bold text-center text-lg sm:text-xl md:text-2xl">{guessedSong ? `Great job on ${pathname === '/play' ? "today's" : 'this'} puzzle!` : `The song was ${song?.name}`}</h2>
         {(onnCustomHeardlePage(pathname) || pathname === '/play/unlimited') && otherHeardleGuesses ? (
           <>
             <kbd className="kbd">{statusSquares(otherHeardleGuesses.map((g) => g.correctStatus))}</kbd>
@@ -154,11 +154,11 @@ export default function ResultCard({ song, guessedSong, customHeardleCreator, ot
             </div>
           </>
         ) : (
-          <>
-            <p className="text-md">{guessedSong ? 'Check back getNewUnlimitedSong for a new song.' : 'Try again tomorrow!'}</p>
+          <div className="flex flex-col items-center gap-2 list-none">
+            <p className="text-md">{guessedSong ? 'Check back tomorrow for a new song.' : 'Try again tomorrow!'}</p>
             <Countdown />
             <ModalButton title="View Statistics" modalId="stats_modal" className="btn glass btn-ghost" />
-          </>
+          </div>
         )}
       </div>
     </motion.div>
