@@ -40,7 +40,7 @@ function AnnouncementBanner({ setShowBanner, announcement }: AnnouncementProps) 
 }
 
 export default function PlayContent({ children }: { children: ReactNode }) {
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(false);
 
   const { guesses, loadingGuesses } = useGuesses();
   const { dailySong, dailySongLoading } = useDailySong();
