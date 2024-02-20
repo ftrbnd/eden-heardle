@@ -45,14 +45,13 @@ const useGuesses = () => {
 
       return { prevStats };
     },
-    onSettled: (_newStats, err, _variables, context) => {
-      if (err) {
-        console.error('STATS MUTATION ERROR: ', err);
-        queryClient.setQueryData(['guesses'], context?.prevStats);
-      }
-
-      queryClient.invalidateQueries({ queryKey: ['stats'] });
-      queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
+    onError: (error, _variables, context) => {
+      console.error('STATS MUTATION ERROR: ', error);
+      queryClient.setQueryData(['guesses'], context?.prevStats);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['stats'] });
+      await queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
     }
   });
 
@@ -63,30 +62,29 @@ const useGuesses = () => {
 
       const prevGuesses = queryClient.getQueryData<GuessedSong[]>(['guesses']);
       if (prevGuesses) {
-        queryClient.setQueryData<GuessedSong[]>(['guesses'], [...prevGuesses, newGuess]);
+        queryClient.setQueryData<GuessedSong[]>(['guesses'], (oldGuesses) => (oldGuesses ? [...oldGuesses, newGuess] : oldGuesses));
       }
 
       return { prevGuesses };
     },
-    onSettled: (newGuesses, err, _variables, context) => {
-      if (err) {
-        console.log('GUESS MUTATION ERROR: ', err);
-        queryClient.setQueryData(['guesses'], context?.prevGuesses);
-      } else {
-        if (correctlyGuessedHeardle(sessionGuesses)) {
-          statsMutation.mutate(true);
-        } else if (newGuesses?.length === 6 && newGuesses.at(-1)?.correctStatus !== 'CORRECT') {
-          statsMutation.mutate(false);
-        }
+    onError: (error, _variables, context) => {
+      console.log('GUESS MUTATION ERROR: ', error);
+      queryClient.setQueryData(['guesses'], context?.prevGuesses);
+    },
+    onSuccess: async (newGuesses) => {
+      if (correctlyGuessedHeardle(newGuesses)) {
+        await statsMutation.mutateAsync(true);
+      } else if (newGuesses?.length === 6 && newGuesses.at(-1)?.correctStatus !== 'CORRECT') {
+        await statsMutation.mutateAsync(false);
       }
 
-      queryClient.invalidateQueries({ queryKey: ['guesses'] });
+      await queryClient.invalidateQueries({ queryKey: ['guesses'] });
     }
   });
 
-  const submitGuess = (guessedSong: Song, correctStatus: 'CORRECT' | 'WRONG' | 'ALBUM') => {
+  const submitGuess = async (guessedSong: Song, correctStatus: 'CORRECT' | 'WRONG' | 'ALBUM') => {
     if (session) {
-      guessMutation.mutate({ ...guessedSong, id: createId(), guessListId: createId(), correctStatus });
+      await guessMutation.mutateAsync({ ...guessedSong, id: createId(), guessListId: createId(), correctStatus });
     } else {
       localUser.updateGuesses({
         name: guessedSong.name,
