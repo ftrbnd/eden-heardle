@@ -19,7 +19,7 @@ export const createCustomHeardle = async (song: Song, startTime: number, userId:
   try {
     if (!song || startTime === null || startTime === undefined || !userId) throw new Error('Missing required parameters');
 
-    const response = await fetch(`${CUSTOM_HEARDLE_ENDPOINT_EXPRESS}/customHeardle`, {
+    const response = await fetch(`${CUSTOM_HEARDLE_ENDPOINT_EXPRESS}/heardles/custom`, {
       method: 'POST',
       body: JSON.stringify({ song, startTime, userId }),
       headers: {
@@ -41,7 +41,7 @@ export const deleteCustomHeardle = async (heardleId: string, userId: string) => 
   try {
     if (!heardleId || !userId) throw new Error('Missing heardleId or userId');
 
-    const response = await fetch(`${CUSTOM_HEARDLE_ENDPOINT_EXPRESS}/customHeardle`, {
+    const response = await fetch(`${CUSTOM_HEARDLE_ENDPOINT_EXPRESS}/heardles/custom`, {
       method: 'DELETE',
       body: JSON.stringify({ heardleId, userId }),
       headers: {
