@@ -62,7 +62,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       maxStreak: Math.max(oldStats.maxStreak, guessedSong ? oldStats.currentStreak + 1 : 0),
       accuracy: oldStats.accuracy + gameAccuracy,
       id: 'fakeid',
-      userId: 'fakeuserid'
+      userId: 'fakeuserid',
+      firstStreak: oldStats.firstStreak // firstStreak is updated in dedicated route
     };
 
     const updatedStats = await prisma.statistics.update({

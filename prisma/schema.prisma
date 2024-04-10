@@ -36,17 +36,18 @@ model Session {
 }
 
 model User {
-  id             String      @id @default(cuid())
+  id             String               @id @default(cuid())
   name           String?
-  email          String?     @unique
+  email          String?              @unique
   emailVerified  DateTime?
   image          String?
   accounts       Account[]
   sessions       Session[]
   statistics     Statistics?
   guesses        Guesses?
-  earlySupporter Boolean?    @default(false)
-  customHeardle CustomHeardle?
+  earlySupporter Boolean?             @default(false)
+  customHeardle  CustomHeardle?
+  first          FirstCompletedDaily?
 }
 
 model VerificationToken {
@@ -68,6 +69,7 @@ model Statistics {
   accuracy      Int    @default(0)
   user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String @unique // relation scalar field (used in the `@relation` attribute above)
+  firstStreak   Int    @default(0)
 }
 
 model Guesses {
@@ -110,23 +112,29 @@ model Song {
 }
 
 model CustomHeardle {
-  id String @id @default(cuid())
-  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String        @unique // relation scalar field (used in the `@relation` attribute above)
-  name     String
-  album    String?
-  cover    String
-  link     String
-  startTime  Int
-  duration Int?
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String  @unique // relation scalar field (used in the `@relation` attribute above)
+  name      String
+  album     String?
+  cover     String
+  link      String
+  startTime Int
+  duration  Int?
 }
 
 model UnlimitedHeardle {
-  id String @id @default(cuid())
-  name     String
-  album    String?
-  cover    String
-  link     String
-  startTime  Int
-  duration Int?
+  id        String  @id @default(cuid())
+  name      String
+  album     String?
+  cover     String
+  link      String
+  startTime Int
+  duration  Int?
+}
+
+model FirstCompletedDaily {
+  id     String  @id @default(cuid())
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String? @unique
 }

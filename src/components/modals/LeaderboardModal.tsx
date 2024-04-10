@@ -1,6 +1,6 @@
 'use client';
 
-import { getLeaderboard } from '@/services/leaderboard';
+import { getFirstCompletedDaily, getLeaderboard } from '@/services/leaderboard';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -14,7 +14,7 @@ import { statusSquares } from '@/utils/functions';
 import { getStats } from '@/services/users';
 import { IndividualLeaderboardStat } from '@/utils/types';
 
-function ProfileColumn({ user }: { user: User }) {
+function ProfileColumn({ user, isFirst, streak }: { user: User; isFirst: boolean; streak?: number }) {
   const [showProfile, setShowProfile] = useState(false);
 
   const queryClient = useQueryClient();
@@ -41,6 +41,7 @@ function ProfileColumn({ user }: { user: User }) {
               <FontAwesomeIcon className="w-3 h-3 text-accent" icon={faGem} />
             </div>
           )}
+          {isFirst && <div className="badge badge-secondary">First! ({streak})</div>}
         </div>
       </div>
       {showProfile && <ProfileModal user={user} showProfile={showProfile} setShowProfile={setShowProfile} />}
@@ -76,6 +77,13 @@ const StatTable = ({ type, stat, isLoading }: { type: IndividualLeaderboardStat[
     }
   };
 
+  const { data: firstCompletedDaily } = useQuery({
+    queryKey: ['first'],
+    queryFn: getFirstCompletedDaily,
+    refetchInterval: 30000, // 30 seconds,
+    refetchIntervalInBackground: true
+  });
+
   if (isLoading)
     return (
       <table className="w-full">
@@ -96,7 +104,7 @@ const StatTable = ({ type, stat, isLoading }: { type: IndividualLeaderboardStat[
           stat.map((stat, index) => (
             <tr key={`${stat.type}-${index}`} className="flex items-center w-full bg-base-200 rounded-box px-2 shadow-md">
               <th className="w-8">{index + 1}</th>
-              <ProfileColumn user={stat.user} />
+              <ProfileColumn user={stat.user} isFirst={stat.user.id === firstCompletedDaily?.userId} streak={firstCompletedDaily?.user?.statistics?.firstStreak} />
               <td className="text-right"> {stat.type === 'Today' ? statusSquares(stat.data) : stat.data}</td>
             </tr>
           ))
@@ -120,10 +128,22 @@ function Tabs() {
     refetchIntervalInBackground: true
   });
 
+  const { data: firstCompletedDaily } = useQuery({
+    queryKey: ['first'],
+    queryFn: getFirstCompletedDaily,
+    refetchInterval: 30000, // 30 seconds,
+    refetchIntervalInBackground: true
+  });
+
   const getActiveStat = () => {
     switch (activeTab) {
       case 'Today':
-        return leaderboard?.today;
+        // TODO: set first to top of list
+        return leaderboard?.today.sort((a, b) => {
+          if (a.user.id === firstCompletedDaily?.userId) return -1;
+          if (b.user.id === firstCompletedDaily?.userId) return 1;
+          return 0;
+        });
       case 'WinPct':
         return leaderboard?.winPercentages;
       case 'Accuracy':

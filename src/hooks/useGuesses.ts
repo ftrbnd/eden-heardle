@@ -6,6 +6,7 @@ import { GuessType } from '@/utils/types';
 import { correctlyGuessedHeardle } from '@/utils/userGuesses';
 import useLocalUser from './useLocalUser';
 import { getGuessedSongs, updateGuessedSongs, updateStats } from '@/services/users';
+import { updateFirstCompletedDaily } from '@/services/leaderboard';
 
 const useGuesses = () => {
   const { data: session, status: sessionStatus } = useSession();
@@ -55,6 +56,16 @@ const useGuesses = () => {
     }
   });
 
+  const firstMutation = useMutation({
+    mutationFn: () => updateFirstCompletedDaily(session?.user.id),
+    onError: (error, _variables, context) => {
+      console.error('FIRSTCOMPLETED MUTATION ERROR: ', error);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['first'] });
+    }
+  });
+
   const guessMutation = useMutation({
     mutationFn: (newGuess: GuessedSong) => updateGuessedSongs(newGuess, session?.user.id),
     onMutate: async (newGuess: GuessedSong) => {
@@ -73,6 +84,7 @@ const useGuesses = () => {
     },
     onSuccess: async (newGuesses) => {
       if (correctlyGuessedHeardle(newGuesses)) {
+        if (session?.user) await firstMutation.mutateAsync();
         await statsMutation.mutateAsync(true);
       } else if (newGuesses?.length === 6 && newGuesses.at(-1)?.correctStatus !== 'CORRECT') {
         await statsMutation.mutateAsync(false);
