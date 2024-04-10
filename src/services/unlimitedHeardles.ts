@@ -4,7 +4,7 @@ const UNLIMITED_HEARDLE_ENDPOINT_EXPRESS = process.env.NEXT_PUBLIC_EXPRESS_URL!;
 
 export const getUnlimitedHeardle = async () => {
   try {
-    const response = await fetch(`${UNLIMITED_HEARDLE_ENDPOINT_EXPRESS}/unlimitedHeardle`);
+    const response = await fetch(`${UNLIMITED_HEARDLE_ENDPOINT_EXPRESS}/heardles/unlimited`);
     if (!response.ok) throw new Error('Failed to get Unlimited Heardle');
 
     const { unlimitedHeardle }: { unlimitedHeardle: UnlimitedHeardle } = await response.json();
