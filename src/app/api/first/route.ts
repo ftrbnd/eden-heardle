@@ -25,8 +25,11 @@ export async function GET() {
 export async function PATCH(req: NextRequest) {
   try {
     const { userId }: { userId: string } = await req.json();
+    console.log({ userId });
 
     const firstAlreadyCompleted = await prisma.firstCompletedDaily.findFirst();
+    console.log({ firstAlreadyCompleted });
+
     if (firstAlreadyCompleted) {
       await prisma.statistics.update({
         where: {
@@ -37,7 +40,7 @@ export async function PATCH(req: NextRequest) {
         }
       });
 
-      return NextResponse.json(null, { status: 204 });
+      return NextResponse.json({ first: firstAlreadyCompleted }, { status: 200 });
     }
 
     const today = await prisma.firstCompletedDaily.create({

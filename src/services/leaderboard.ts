@@ -47,13 +47,11 @@ export const updateFirstCompletedDaily = async (userId: string | undefined) => {
     });
     if (!response.ok) throw new Error('Failed to update FirstCompletedDaily');
 
-    if (response.status === 204) {
-      return null;
-    }
-
     const { first }: { first: FirstCompletedWithUserStatistics } = await response.json();
     return first;
   } catch (error) {
+    console.log(error);
+
     throw new Error('Failed to update FirstCompletedDaily table');
   }
 };

@@ -49,7 +49,7 @@ function StatsGrid({ stats, loading }: { stats: LocalStatistics | null | undefin
       />
       <StatBox loading={loading} stat={stats?.currentStreak ?? 0} title={'Current Streak'} icon={faArrowTrendUp} />
       <StatBox loading={loading} stat={stats?.maxStreak ?? 0} title={'Max Streak'} icon={faTrophy} />
-      {session?.user.id === firstCompletedDaily?.userId && (
+      {session && session.user.id === firstCompletedDaily?.userId && (
         <StatBox loading={loading} stat={`Streak: ${firstCompletedDaily?.user?.statistics?.firstStreak}`} title="You were first today!" icon={faStar} isFirst />
       )}
     </div>

@@ -1,11 +1,11 @@
+generator cli {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-}
-
-generator cli {
-  provider = "prisma-client-js"
 }
 
 model Account {
@@ -14,15 +14,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -41,13 +40,13 @@ model User {
   email          String?              @unique
   emailVerified  DateTime?
   image          String?
-  accounts       Account[]
-  sessions       Session[]
-  statistics     Statistics?
-  guesses        Guesses?
   earlySupporter Boolean?             @default(false)
+  accounts       Account[]
   customHeardle  CustomHeardle?
   first          FirstCompletedDaily?
+  guesses        Guesses?
+  sessions       Session[]
+  statistics     Statistics?
 }
 
 model VerificationToken {
@@ -58,25 +57,23 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// custom models for EDEN Heardle below
-
 model Statistics {
   id            String @id @default(cuid())
+  maxStreak     Int    @default(0)
   gamesPlayed   Int    @default(0)
   gamesWon      Int    @default(0)
+  userId        String @unique
   currentStreak Int    @default(0)
-  maxStreak     Int    @default(0)
   accuracy      Int    @default(0)
-  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String @unique // relation scalar field (used in the `@relation` attribute above)
   firstStreak   Int    @default(0)
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Guesses {
   id     String        @id @default(cuid())
+  userId String        @unique
   songs  GuessedSong[]
   user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String        @unique // relation scalar field (used in the `@relation` attribute above)
 }
 
 model GuessedSong {
@@ -85,9 +82,9 @@ model GuessedSong {
   album         String?
   cover         String
   correctStatus String
-  guessList     Guesses @relation(fields: [guessListId], references: [id], onDelete: Cascade)
-  guessListId   String // relation scalar field (used in the `@relation` attribute above)
+  guessListId   String
   duration      Int?
+  guessList     Guesses @relation(fields: [guessListId], references: [id], onDelete: Cascade)
 }
 
 model DailySong {
@@ -113,14 +110,14 @@ model Song {
 
 model CustomHeardle {
   id        String  @id @default(cuid())
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String  @unique // relation scalar field (used in the `@relation` attribute above)
+  userId    String  @unique
   name      String
   album     String?
   cover     String
   link      String
   startTime Int
   duration  Int?
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model UnlimitedHeardle {
@@ -135,6 +132,6 @@ model UnlimitedHeardle {
 
 model FirstCompletedDaily {
   id     String  @id @default(cuid())
-  user   User?   @relation(fields: [userId], references: [id])
   userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
 }
