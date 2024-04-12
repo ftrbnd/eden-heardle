@@ -2,7 +2,7 @@
 
 import SignInButton from '../buttons/SignInButton';
 import { MouseEvent, useState } from 'react';
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faRankingStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion } from 'framer-motion';
 import useGuesses from '@/hooks/useGuesses';
@@ -11,6 +11,7 @@ import useStatistics from '@/hooks/useStatistics';
 import { statusSquares } from '@/utils/functions';
 import StatsGrid from '../StatsGrid';
 import { finishedHeardle } from '@/utils/userGuesses';
+import { ModalButton } from '../buttons/RedirectButton';
 
 export default function StatsModal() {
   const [showSuccess, setShowSuccess] = useState(false);
@@ -44,7 +45,11 @@ export default function StatsModal() {
           </div>
         )}
 
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-2 list-none">
+          <ModalButton title="Leaderboard" modalId="leaderboard_modal" className="btn btn-outline btn-secondary">
+            <FontAwesomeIcon icon={faRankingStar} className="h-6 w-6" />
+          </ModalButton>
+
           {guessType === 'local' && <SignInButton />}
           {finishedHeardle(guesses) && (
             <motion.button
