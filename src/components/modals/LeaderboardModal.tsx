@@ -8,7 +8,7 @@ import { useState } from 'react';
 import SignInButton from '../buttons/SignInButton';
 import { User } from '@prisma/client';
 import ProfileModal from './ProfileModal';
-import { faGem } from '@fortawesome/free-solid-svg-icons';
+import { fa1, faGem, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { statusSquares } from '@/utils/functions';
 import { getStats } from '@/services/users';
@@ -34,14 +34,14 @@ function ProfileColumn({ user, isFirst, streak }: { user: User; isFirst: boolean
             <Image src={user.image || '/default.png'} alt={`${user.name}'s Avatar`} height={48} width={48} />
           </div>
         </div>
-        <div className="flex gap-2 justify-center items-center">
+        <div className="flex gap-2 justify-center items-center text">
           <div className="font-bold">{user.name}</div>
           {user.earlySupporter && (
             <div className="tooltip" data-tip="Early Supporter">
               <FontAwesomeIcon className="w-3 h-3 text-accent" icon={faGem} />
             </div>
           )}
-          {isFirst && <div className="badge badge-secondary">First! ({streak})</div>}
+          {isFirst && <div className="badge badge-secondary">First! {`${streak && streak > 1 ? `(${streak})` : ''}`}</div>}
         </div>
       </div>
       {showProfile && <ProfileModal user={user} showProfile={showProfile} setShowProfile={setShowProfile} />}
@@ -138,7 +138,6 @@ function Tabs() {
   const getActiveStat = () => {
     switch (activeTab) {
       case 'Today':
-        // TODO: set first to top of list
         return leaderboard?.today.sort((a, b) => {
           if (a.user.id === firstCompletedDaily?.userId) return -1;
           if (b.user.id === firstCompletedDaily?.userId) return 1;
