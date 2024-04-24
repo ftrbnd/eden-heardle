@@ -6,7 +6,7 @@ import { LocalGuessedSong } from '@/utils/types';
 import { finishedHeardle } from '@/utils/userGuesses';
 import { createId } from '@paralleldrive/cuid2';
 import { Song, DailySong, CustomHeardle, GuessedSong, UnlimitedHeardle } from '@prisma/client';
-import { useEffect, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { useEffect, ChangeEvent, Dispatch, SetStateAction, useRef, forwardRef } from 'react';
 
 interface SelectProps {
   heardleSong: DailySong | CustomHeardle | UnlimitedHeardle;
@@ -15,7 +15,9 @@ interface SelectProps {
   setOtherGuesses?: Dispatch<SetStateAction<GuessedSong[]>>;
 }
 
-export default function SongSelectInput({ heardleSong, songLoading, guesses, setOtherGuesses }: SelectProps) {
+type Ref = HTMLSelectElement;
+
+const MySongSelectInput = forwardRef<Ref, SelectProps>(function SongSelectInput({ heardleSong, songLoading, guesses, setOtherGuesses }, ref) {
   const { songs, songsLoading } = useSongs();
   const { submitGuess } = useGuesses();
 
@@ -51,8 +53,9 @@ export default function SongSelectInput({ heardleSong, songLoading, guesses, set
 
   return (
     <select
+      ref={ref}
       className="select select-primary w-full md:w-3/5 xl:w-2/5 place-self-center"
-      defaultValue={'Choose a Song'}
+      defaultValue={'Choose a song!'}
       onChange={handleSelection}
       disabled={songsLoading || songLoading || !heardleSong}
     >
@@ -64,4 +67,6 @@ export default function SongSelectInput({ heardleSong, songLoading, guesses, set
       ))}
     </select>
   );
-}
+});
+
+export default MySongSelectInput;

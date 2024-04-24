@@ -3,7 +3,7 @@
 import { GuessCard } from '@/components/GuessCard';
 import Navbar from '@/app/play/content/Navbar';
 import { GuessedSong, UnlimitedHeardle } from '@prisma/client';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { correctlyGuessedHeardle, finishedHeardle } from '@/utils/userGuesses';
 import WelcomeCard from '@/app/play/content/WelcomeCard';
@@ -22,6 +22,8 @@ export default function UnlimitedPageContent({ children }: PageProps) {
   const [songLoading, setSongLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const songSelectRef = useRef<HTMLSelectElement>(null);
+
   useEffect(() => {
     getSong();
   }, []);
@@ -36,6 +38,7 @@ export default function UnlimitedPageContent({ children }: PageProps) {
 
       setSongLoading(false);
       setError('');
+      if (songSelectRef.current) songSelectRef.current.value = 'Choose a song!';
     } catch (err: any) {
       setError(err.message);
     }
@@ -61,7 +64,7 @@ export default function UnlimitedPageContent({ children }: PageProps) {
         )}
       </div>
       <div className="grid grid-rows-2-auto flex-col gap-2 items-center w-full card shadow-2xl px-4 pb-4">
-        <SongSelectInput heardleSong={unlimitedSong!} songLoading={songLoading} guesses={unlimitedGuesses} setOtherGuesses={setUnlimitedGuesses} />
+        <SongSelectInput ref={songSelectRef} heardleSong={unlimitedSong!} songLoading={songLoading} guesses={unlimitedGuesses} setOtherGuesses={setUnlimitedGuesses} />
         <AudioPlayer song={unlimitedSong!} songLoading={songLoading} guesses={unlimitedGuesses} />
       </div>
     </div>
