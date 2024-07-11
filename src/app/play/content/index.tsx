@@ -13,9 +13,10 @@ import { correctlyGuessedHeardle, finishedHeardle } from '@/utils/helpers';
 import WelcomeCard from '@/app/play/content/WelcomeCard';
 import ResultCard from './ResultCard';
 import AnnouncementBanner from './AnnouncementBanner';
+import { clientEnv } from '@/utils/env';
 
 export default function PlayContent({ children }: { children: ReactNode }) {
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(clientEnv.NEXT_PUBLIC_SHOW_BANNER ?? false);
 
   const { guesses, loadingGuesses } = useGuesses();
   const { dailySong, dailySongLoading } = useDailySong();
@@ -28,7 +29,7 @@ export default function PlayContent({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex flex-col items-center h-full justify-between">
-      {showBanner && <AnnouncementBanner setShowBanner={setShowBanner} announcement="EDEN Heardle is currently experiencing issues, please check the Discord server for updates." />}
+      {showBanner && <AnnouncementBanner setShowBanner={setShowBanner} />}
       <Navbar>{children}</Navbar>
       <div className="grid grid-rows-2-auto place-items-center gap-1 px-4 w-full h-full pt-4">
         <AnimatePresence>
