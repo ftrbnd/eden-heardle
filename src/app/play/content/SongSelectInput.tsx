@@ -22,8 +22,6 @@ const MySongSelectInput = forwardRef<Ref, SelectProps>(function SongSelectInput(
   const { submitGuess } = useGuesses();
 
   useEffect(() => {
-    console.log({ guesses });
-
     if (guesses && finishedHeardle(guesses) && !setOtherGuesses) {
       const modal = document.getElementById('stats_modal') as HTMLDialogElement;
       if (!modal.open) modal.showModal();
