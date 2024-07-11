@@ -5,6 +5,7 @@ import { NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 
 export const options: NextAuthOptions = {
+  // @ts-ignore Property 'id' is missing in type 'Omit<AdapterUser, "id">' but required in type 'AdapterUser'
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
