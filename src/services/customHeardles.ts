@@ -1,6 +1,7 @@
+import { env } from '@/utils/env';
 import { CustomHeardle, Song } from '@prisma/client';
 
-const CUSTOM_HEARDLE_ENDPOINT_EXPRESS = process.env.NEXT_PUBLIC_EXPRESS_URL!;
+const CUSTOM_HEARDLE_ENDPOINT_EXPRESS = env.NEXT_PUBLIC_EXPRESS_URL;
 const CUSTOM_HEARDLE_ENDPOINT_NEXT = '/api/customHeardles';
 
 export const getOtherCustomHeardle = async (heardleId: string) => {
