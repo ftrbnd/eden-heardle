@@ -6,6 +6,8 @@ export const serverEnv = createEnv({
     DATABASE_URL: z.string().url(),
     DIRECT_URL: z.string().url(),
 
+    REDIS_URL: z.string().url(),
+
     NEXTAUTH_SECRET: z.string(),
     NEXTAUTH_URL: z.string().url().optional(),
 
@@ -15,6 +17,8 @@ export const serverEnv = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     DIRECT_URL: process.env.DIRECT_URL,
+
+    REDIS_URL: process.env.REDIS_URL,
 
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
