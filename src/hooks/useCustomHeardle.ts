@@ -49,7 +49,7 @@ const useCustomHeardle = () => {
     await deleteHeardleMutation.mutateAsync();
   };
 
-  return { data, create, remove, createLoading: createHeardleMutation.isLoading, deleteLoading: deleteHeardleMutation.isLoading };
+  return { data, create, remove, createLoading: createHeardleMutation.isPending, deleteLoading: deleteHeardleMutation.isPending };
 };
 
 export default useCustomHeardle;

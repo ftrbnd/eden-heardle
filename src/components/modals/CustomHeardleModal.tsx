@@ -19,7 +19,7 @@ interface SelectProps {
 }
 
 function SelectSong({ onSongSelect, session }: SelectProps) {
-  const { songs, songsLoading } = useSongs();
+  const { songs, songsPending } = useSongs();
 
   const handleSelection = (event: ChangeEvent<HTMLSelectElement>) => {
     const song = songs?.find((song) => song.name === event.target.value);
@@ -36,7 +36,7 @@ function SelectSong({ onSongSelect, session }: SelectProps) {
       <select
         className="select select-primary w-full place-self-center"
         defaultValue={'Choose a Song'}
-        disabled={songsLoading || !session}
+        disabled={songsPending || !session}
         // disabled
         onChange={handleSelection}
       >

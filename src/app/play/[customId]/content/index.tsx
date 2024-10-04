@@ -24,7 +24,7 @@ export default function CustomHeardlePageContent({ params, children }: PageProps
 
   const {
     data: customHeardleSong,
-    isLoading: songLoading,
+    isPending: songPending,
     error: songError
   } = useQuery({
     queryKey: ['customHeardle', params.customId],
@@ -57,8 +57,8 @@ export default function CustomHeardlePageContent({ params, children }: PageProps
         )}
       </div>
       <div className="grid grid-rows-2-auto flex-col gap-2 items-center w-full card shadow-2xl px-4 pb-4">
-        <SongSelectInput heardleSong={customHeardleSong} songLoading={songLoading} guesses={customGuesses} setOtherGuesses={setCustomGuesses} />
-        <AudioPlayer song={customHeardleSong} songLoading={songLoading} guesses={customGuesses} />
+        <SongSelectInput heardleSong={customHeardleSong} songPending={songPending} guesses={customGuesses} setOtherGuesses={setCustomGuesses} />
+        <AudioPlayer song={customHeardleSong} songPending={songPending} guesses={customGuesses} />
       </div>
     </div>
   );

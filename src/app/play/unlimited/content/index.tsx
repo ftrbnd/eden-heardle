@@ -64,8 +64,8 @@ export default function UnlimitedPageContent({ children }: PageProps) {
         )}
       </div>
       <div className="grid grid-rows-2-auto flex-col gap-2 items-center w-full card shadow-2xl px-4 pb-4">
-        <SongSelectInput ref={songSelectRef} heardleSong={unlimitedSong} songLoading={songLoading} guesses={unlimitedGuesses} setOtherGuesses={setUnlimitedGuesses} />
-        <AudioPlayer song={unlimitedSong} songLoading={songLoading} guesses={unlimitedGuesses} />
+        <SongSelectInput ref={songSelectRef} heardleSong={unlimitedSong} songPending={songLoading} guesses={unlimitedGuesses} setOtherGuesses={setUnlimitedGuesses} />
+        <AudioPlayer song={unlimitedSong} songPending={songLoading} guesses={unlimitedGuesses} />
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ const useGuesses = () => {
   const localUser = useLocalUser();
   const queryClient = useQueryClient();
 
-  const { data: sessionGuesses, isInitialLoading: initialLoadingSessionGuesses } = useQuery<GuessedSong[]>({
+  const { data: sessionGuesses, isLoading: initialLoadingSessionGuesses } = useQuery<GuessedSong[]>({
     queryKey: ['guesses'],
     queryFn: () => getGuessedSongs(session?.user.id),
     enabled: session?.user.id !== null && session?.user.id !== undefined,

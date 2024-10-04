@@ -25,7 +25,7 @@ export default function PlayContent({ children }: { children: ReactNode }) {
   const [showBanner, setShowBanner] = useState(true);
 
   const { guesses, loadingGuesses } = useGuesses();
-  const { dailySong, dailySongLoading } = useDailySong();
+  const { dailySong, dailySongPending } = useDailySong();
   const router = useRouter();
 
   // used to get rid of url created for showing rules modal
@@ -56,8 +56,8 @@ export default function PlayContent({ children }: { children: ReactNode }) {
         {finishedHeardle(guesses) ? <ResultCard song={dailySong} guessedSong={correctlyGuessedHeardle(guesses)} /> : <div></div>}
       </div>
       <div className="grid grid-rows-2-auto flex-col gap-2 items-center w-full card shadow-2xl px-4 pb-4">
-        <SongSelectInput heardleSong={dailySong} songLoading={dailySongLoading} guesses={guesses} />
-        <AudioPlayer song={dailySong} songLoading={dailySongLoading || loadingGuesses || !guesses} guesses={guesses} />
+        <SongSelectInput heardleSong={dailySong} songPending={dailySongPending} guesses={guesses} />
+        <AudioPlayer song={dailySong} songPending={dailySongPending || loadingGuesses || !guesses} guesses={guesses} />
       </div>
     </div>
   );

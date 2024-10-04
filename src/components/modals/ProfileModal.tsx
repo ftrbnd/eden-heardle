@@ -10,7 +10,7 @@ import { getStats } from '@/services/users';
 export default function ProfileModal({ user, showProfile, setShowProfile }: { user: User; showProfile: boolean; setShowProfile: (show: boolean) => void }) {
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
-  const { data: userStats, isLoading } = useQuery({
+  const { data: userStats, isPending } = useQuery({
     queryKey: ['stats', user.id],
     queryFn: () => getStats(user.id)
   });
@@ -46,7 +46,7 @@ export default function ProfileModal({ user, showProfile, setShowProfile }: { us
             </div>
           </div>
         </div>
-        {!isLoading && userStats && <StatsGrid stats={userStats} userId={user.id} />}
+        {!isPending && userStats && <StatsGrid stats={userStats} userId={user.id} />}
       </div>
 
       <form method="dialog" className="modal-backdrop">

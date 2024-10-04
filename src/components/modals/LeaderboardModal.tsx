@@ -59,7 +59,7 @@ const LoadingTableRow = () => {
   );
 };
 
-const StatTable = ({ type, stat, isLoading }: { type: IndividualLeaderboardStat['type']; stat?: IndividualLeaderboardStat[]; isLoading: boolean }) => {
+const StatTable = ({ type, stat, isPending }: { type: IndividualLeaderboardStat['type']; stat?: IndividualLeaderboardStat[]; isPending: boolean }) => {
   const getEmptyTableNotice = () => {
     if (!stat) return 'Statistics unavailable.';
 
@@ -84,7 +84,7 @@ const StatTable = ({ type, stat, isLoading }: { type: IndividualLeaderboardStat[
     refetchIntervalInBackground: true
   });
 
-  if (isLoading)
+  if (isPending)
     return (
       <table className="w-full">
         <tbody className="w-full flex flex-col gap-4 md:gap-4 items-center">
@@ -121,7 +121,7 @@ const StatTable = ({ type, stat, isLoading }: { type: IndividualLeaderboardStat[
 function Tabs() {
   const [activeTab, setActiveTab] = useState<IndividualLeaderboardStat['type']>('Today');
 
-  const { data: leaderboard, isLoading: leaderboardLoading } = useQuery({
+  const { data: leaderboard, isPending: leaderboardPending } = useQuery({
     queryKey: ['leaderboard'],
     queryFn: getLeaderboard,
     refetchInterval: 30000, // 30 seconds,
@@ -175,7 +175,7 @@ function Tabs() {
           </p>
         </div>
       </div>
-      <StatTable stat={getActiveStat()} isLoading={leaderboardLoading} type={activeTab} />
+      <StatTable stat={getActiveStat()} isPending={leaderboardPending} type={activeTab} />
     </div>
   );
 }

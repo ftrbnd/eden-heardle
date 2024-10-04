@@ -9,11 +9,11 @@ import { useEffect, useRef, useState } from 'react';
 
 interface AudioProps {
   song?: DailySong | CustomHeardle | UnlimitedHeardle;
-  songLoading: boolean;
+  songPending: boolean;
   guesses?: GuessedSong[] | LocalGuessedSong[] | null;
 }
 
-export default function AudioPlayer({ song, songLoading, guesses }: AudioProps) {
+export default function AudioPlayer({ song, songPending, guesses }: AudioProps) {
   const [second, setSecond] = useState(0);
   const [icon, setIcon] = useState<IconDefinition>(faPlay);
   const [error, setError] = useState('');
@@ -82,7 +82,7 @@ export default function AudioPlayer({ song, songLoading, guesses }: AudioProps) 
 
       <div className="flex justify-between pt-2 w-full md:w-3/5 xl:w-2/5">
         <kbd className="kbd">00:{String(Math.floor(second)).padStart(2, '0')}</kbd>
-        {songLoading ? (
+        {songPending ? (
           <button className="btn btn-ghost btn-disabled">
             <span className="loading loading-ring loading-md"></span>
           </button>

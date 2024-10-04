@@ -10,15 +10,15 @@ import { useEffect, ChangeEvent, Dispatch, SetStateAction, useRef, forwardRef } 
 
 interface SelectProps {
   heardleSong?: DailySong | CustomHeardle | UnlimitedHeardle;
-  songLoading: boolean;
+  songPending: boolean;
   guesses: GuessedSong[] | LocalGuessedSong[];
   setOtherGuesses?: Dispatch<SetStateAction<GuessedSong[]>>;
 }
 
 type Ref = HTMLSelectElement;
 
-const MySongSelectInput = forwardRef<Ref, SelectProps>(function SongSelectInput({ heardleSong, songLoading, guesses, setOtherGuesses }, ref) {
-  const { songs, songsLoading } = useSongs();
+const MySongSelectInput = forwardRef<Ref, SelectProps>(function SongSelectInput({ heardleSong, songPending, guesses, setOtherGuesses }, ref) {
+  const { songs, songsPending } = useSongs();
   const { submitGuess } = useGuesses();
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const MySongSelectInput = forwardRef<Ref, SelectProps>(function SongSelectInput(
       className="select select-primary w-full md:w-3/5 xl:w-2/5 place-self-center"
       defaultValue={'Choose a song!'}
       onChange={handleSelection}
-      disabled={songsLoading || songLoading || !heardleSong}
+      disabled={songsPending || songPending || !heardleSong}
     >
       <option className="default_selection">Choose a song!</option>
       {songs?.map((song) => (
