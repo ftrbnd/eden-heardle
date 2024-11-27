@@ -40,9 +40,9 @@ export default function PlayContent({ children }: { children: ReactNode }) {
       <Navbar>{children}</Navbar>
       <div className="flex-1 flex w-full justify-between items-center">
         <Banner desktopOnly data-ad-slot="7787337789" data-ad-format="autorelaxed" />
-        <div className="grid grid-rows-2-auto place-items-center gap-1 px-4 flex-1 h-full pt-4">
+        <div className="grid grid-rows-2-auto place-items-center gap-1 px-4 h-full w-full md:max-w-md pt-4">
           <AnimatePresence>
-            <div className={`grid ${guesses?.length === 0 ? 'grid-rows-1' : 'grid-rows-6'} w-4/5 md:w-3/5 xl:w-2/5 gap-2 place-self-center`}>
+            <div className={`grid ${guesses?.length === 0 ? 'grid-rows-1' : 'grid-rows-6'} w-full gap-2 place-self-center`}>
               {loadingGuesses || !guesses ? (
                 [1, 2, 3, 4, 5, 6].map((num) => <GuessCard key={num} name="" album="" cover="/default_song.png" showAnimation={false} />)
               ) : (
