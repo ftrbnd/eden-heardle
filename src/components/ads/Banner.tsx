@@ -2,6 +2,7 @@
 
 import useAds from '@/hooks/useAds';
 import { clientEnv } from '@/utils/env';
+import { cn } from '@/utils/helpers';
 import Router from 'next/router';
 import { useEffect } from 'react';
 declare global {
@@ -13,8 +14,9 @@ declare global {
 interface AdsBannerProps {
   'data-ad-slot': string;
   'data-ad-format': string;
-  'data-full-width-responsive'?: string;
+  'data-full-width-responsive'?: 'true';
   desktopOnly?: boolean;
+  className?: string;
 }
 
 const handleRouteChange = () => {
@@ -53,16 +55,18 @@ export default function Banner(props: AdsBannerProps) {
   }, []);
 
   return preference ? (
-    <ins
-      className={`adsbygoogle adbanner-customize ${props.desktopOnly ? 'hidden md:block' : 'block'}`}
-      style={{
-        overflow: 'hidden',
-        border: process.env.NODE_ENV === 'development' ? '1px solid red' : 'none',
-        background: process.env.NODE_ENV === 'development' ? 'rgba(255, 0, 0, 0.1)' : 'none'
-      }}
-      data-ad-client={clientEnv.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}
-      {...props}
-    />
+    <div
+      className={cn(
+        'overflow-hidden block h-full w-full',
+        {
+          'hidden md:block': props.desktopOnly,
+          'border border-solid border-red-600 bg-red-600': process.env.NODE_ENV === 'development'
+        },
+        props.className
+      )}
+    >
+      <ins className="adsbygoogle adbanner-customize" data-ad-client={clientEnv.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID} {...props} />
+    </div>
   ) : (
     <></>
   );

@@ -1,5 +1,11 @@
 import { GuessedSong } from '@prisma/client';
 import { LocalGuessedSong } from './types';
+import { twMerge } from 'tailwind-merge';
+import { clsx, ClassValue } from 'clsx';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 function getStatusSquare(status: string) {
   switch (status) {
