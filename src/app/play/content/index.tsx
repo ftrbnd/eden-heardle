@@ -38,7 +38,7 @@ export default function PlayContent({ children }: { children: ReactNode }) {
     <div className="flex flex-col items-center h-full justify-between">
       {announcement?.showBanner && showBanner && <AnnouncementBanner setShowBanner={setShowBanner} />}
       <Navbar>{children}</Navbar>
-      <div className="flex-1 flex w-full justify-between items-center">
+      <div className="flex-1 flex w-full justify-center items-center">
         <Banner desktopOnly data-ad-slot="7787337789" data-ad-format="autorelaxed" />
         <div className="grid grid-rows-2-auto place-items-center gap-1 px-4 h-full w-full md:max-w-md pt-4">
           <AnimatePresence>

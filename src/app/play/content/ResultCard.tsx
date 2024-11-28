@@ -121,12 +121,7 @@ export default function ResultCard({ song, guessedSong, customHeardleCreator, ot
   };
 
   return (
-    <motion.div
-      className="self-end w-4/5 md:w-3/5 xl:w-2/5 card bg-base-100 shadow-xl image-full overflow-hidden mb-4 mt-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 3 }}
-    >
+    <motion.div className="self-end card bg-base-100 shadow-xl image-full overflow-hidden mb-4 mt-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 3 }}>
       <figure>
         <Image src={song?.cover ?? ''} alt={song?.name ?? 'Song name'} fill style={{ objectFit: 'cover' }} priority />
       </figure>
