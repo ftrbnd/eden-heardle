@@ -1,12 +1,9 @@
 import { ModalButton } from '@/components/buttons/RedirectButton';
-import { getFirstCompletedDaily } from '@/services/leaderboard';
 import { statusSquares, onCustomHeardlePage } from '@/utils/helpers';
 import { faArrowRotateRight, faCopy } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CustomHeardle, DailySong, GuessedSong, UnlimitedHeardle, User } from '@prisma/client';
-import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -110,25 +107,13 @@ function Countdown() {
 export default function ResultCard({ song, guessedSong, customHeardleCreator, otherHeardleGuesses, getNewUnlimitedSong }: ResultCardProps) {
   const [copied, setCopied] = useState(false);
   const pathname = usePathname();
-  const { data: session } = useSession();
-
-  const { data: firstCompletedDaily } = useQuery({
-    queryKey: ['first'],
-    queryFn: getFirstCompletedDaily,
-    refetchInterval: 30000,
-    refetchIntervalInBackground: true
-  });
-
-  const userFirstCompletedDaily = session ? firstCompletedDaily?.user?.id === session?.user.id : false;
 
   const copyToClipboard = async (e: MouseEvent) => {
     e.preventDefault();
     if (copied || !otherHeardleGuesses) return;
 
     setCopied(true);
-    await navigator.clipboard.writeText(
-      `EDEN Heardle #${customHeardleCreator?.name} ${statusSquares(otherHeardleGuesses.map((g) => g.correctStatus)).replace(/\s/g, '')}${userFirstCompletedDaily ? `🥇` : ''}`
-    );
+    await navigator.clipboard.writeText(`EDEN Heardle #${customHeardleCreator?.name} ${statusSquares(otherHeardleGuesses.map((g) => g.correctStatus)).replace(/\s/g, '')}`);
 
     setTimeout(() => {
       setCopied(false);
