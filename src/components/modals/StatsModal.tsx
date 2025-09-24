@@ -12,6 +12,8 @@ import StatsGrid from '../StatsGrid';
 import { finishedHeardle, statusSquares } from '@/utils/helpers';
 import { ModalButton } from '../buttons/RedirectButton';
 import { useSession } from 'next-auth/react';
+import { getFirstCompletedDaily } from '@/services/leaderboard';
+import { useQuery } from '@tanstack/react-query';
 
 export default function StatsModal() {
   const [showSuccess, setShowSuccess] = useState(false);
@@ -22,12 +24,21 @@ export default function StatsModal() {
 
   const { dailySong } = useDailySong();
 
+  const { data: firstCompletedDaily } = useQuery({
+    queryKey: ['first'],
+    queryFn: getFirstCompletedDaily,
+    refetchInterval: 30000,
+    refetchIntervalInBackground: true
+  });
+
+  const userFirstCompletedDaily = session ? firstCompletedDaily?.user?.id === session?.user.id : false;
+
   const copyToClipboard = async (e: MouseEvent) => {
     e.preventDefault();
     if (showSuccess || !guesses) return;
 
     setShowSuccess(true);
-    await navigator.clipboard.writeText(`EDEN Heardle #${dailySong?.heardleDay} ${statusSquares(guesses.map((g) => g.correctStatus)).replace(/\s/g, '')}`);
+    await navigator.clipboard.writeText(`EDEN Heardle #${dailySong?.heardleDay} ${statusSquares(guesses.map((g) => g.correctStatus)).replace(/\s/g, '')}${userFirstCompletedDaily ? `🥇` : ''}`);
 
     setTimeout(() => {
       setShowSuccess(false);
