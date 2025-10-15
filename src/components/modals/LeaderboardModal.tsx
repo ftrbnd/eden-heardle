@@ -35,7 +35,7 @@ function ProfileColumn({ user, isFirst, streak }: { user: User; isFirst: boolean
           </div>
         </div>
         <div className="flex gap-2 justify-center items-center text">
-          <div className="font-bold">{user.name}</div>
+          <div className="font-bold max-w-36 truncate">{user.name}</div>
           {user.earlySupporter && (
             <div className="tooltip" data-tip="Early Supporter">
               <FontAwesomeIcon className="w-3 h-3 text-accent" icon={faGem} />

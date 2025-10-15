@@ -33,7 +33,9 @@ export default function ProfileModal({ user, showProfile, setShowProfile }: { us
       <div className="modal-box min-w-min max-h-80 sm:max-h-max">
         <div className="grid grid-cols-2">
           <div className="flex justify-start items-center gap-2">
-            <h3 className="font-bold text-2xl place-self-start self-center">{user.name}</h3>
+            <div className="tooltip" data-tip={user.name}>
+              <h3 className="font-bold text-2xl place-self-start self-center max-w-64 truncate">{user.name}</h3>
+            </div>
             {user.earlySupporter && (
               <div className="tooltip" data-tip="Early Supporter">
                 <FontAwesomeIcon className="w-6 h-6 text-accent" icon={faGem} />
